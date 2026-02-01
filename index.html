@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>🎓 Placement Prediction System</h2>
+        
+        {% if prediction_text %}
+        <div class="result-overlay">
+            <div class="result">
+                <h3 class="{% if 'Placed 🎉' in prediction_text %}placed{% elif 'not eligible' in prediction_text %}error{% else %}not-placed{% endif %}">
+                    {{ prediction_text|safe }}
+                </h3>
+                <button class="back-btn" onclick="goBack()">Try Again</button>
+            </div>
+        </div>
+        {% else %}
+        <form action="/predict" method="POST" id="placementForm">
+            
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select name="gender" id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="X_percentage">10th Percentage</label>
+                    <input type="number" step="0.01" name="X_percentage" id="X_percentage" min="0" max="100" placeholder="Enter 10th percentage (0-100)" required>
+                    <small id="X_error" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="XII_percentage">12th Percentage</label>
+                    <input type="number" step="0.01" name="XII_percentage" id="XII_percentage" min="0" max="100" placeholder="Enter 12th percentage (0-100)" required>
+                    <small id="XII_error" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="degree_percentage">Degree Percentage</label>
+                    <input type="number" step="0.01" name="degree_percentage" id="degree_percentage" min="0" max="100" placeholder="Enter degree percentage (0-100)" required>
+                    <small id="degree_error" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="undergrad_degree">Undergraduate Degree</label>
+                    <select name="undergrad_degree" id="undergrad_degree" required>
+                        <option value="">Select Degree</option>
+                        <option value="Sci&Tech">Science & Technology</option>
+                        <option value="Comm&Mgmt">Commerce & Management</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="work_experience">Work Experience</label>
+                    <select name="work_experience" id="work_experience" required>
+                        <option value="">Select Experience</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Backlog">Backlog Count</label>
+                    <input type="number" name="Backlog" id="Backlog" placeholder="Enter number of backlogs (0-3)" min="0" max="3" required>
+                    <small id="backlogError" class="error-message"></small>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="submit-btn" id="submitBtn">Predict Placement</button>
+            </div>
+
+        </form>
+        {% endif %}
+    </div>
+
+    <script>
+        const backlogInput = document.getElementById('Backlog');
+        const backlogError = document.getElementById('backlogError');
+        const submitBtn = document.getElementById('submitBtn');
+
+        backlogInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            
+            if (this.value !== '' && (isNaN(value) || value < 0 || value > 3)) {
+                backlogError.textContent = '❌ Invalid input! Backlog count must be between 0-3';
+                backlogError.style.display = 'block';
+                submitBtn.disabled = true;
+            } else {
+                backlogError.textContent = '';
+                backlogError.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        backlogInput.addEventListener('change', function() {
+            if (this.value !== '') {
+                const value = parseInt(this.value);
+                if (value < 0) this.value = 0;
+                if (value > 3) this.value = 3;
+            }
+        });
+
+        // Percentage validation for 10th, 12th, and Degree percentages
+        const percentageInputs = ['X_percentage', 'XII_percentage', 'degree_percentage'];
+        
+        percentageInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId.replace('_percentage', '_error'));
+            
+            input.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                
+                if (this.value !== '' && (isNaN(value) || value < 0 || value > 100)) {
+                    errorElement.textContent = '❌ Invalid! Percentage must be between 0-100';
+                    errorElement.style.display = 'block';
+                    submitBtn.disabled = true;
+                } else {
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            });
+            
+            input.addEventListener('change', function() {
+                if (this.value !== '') {
+                    let value = parseFloat(this.value);
+                    if (value < 0) this.value = 0;
+                    if (value > 100) this.value = 100;
+                }
+            });
+        });
+
+        // Auto-refresh after 5 seconds if prediction result is shown
+        {% if prediction_text %}
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countdownInterval = setInterval(function() {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = '/';
+            }
+        }, 1000);
+        
+        function goBack() {
+            clearInterval(countdownInterval);
+            window.location.href = '/';
+        }
+        {% endif %}
+    </script>
+</body>
+</html>

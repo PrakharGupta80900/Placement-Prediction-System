@@ -1,0 +1,365 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('/static/collegecampus.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 0.8s ease;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+form {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    animation: fadeInUp 0.8s ease;
+    min-height: 300px;
+    position: relative;
+}
+
+.form-step {
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.step-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.prev-btn,
+.next-btn,
+.submit-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.next-btn,
+.submit-btn {
+    background: rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.prev-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+}
+
+.next-btn:hover,
+.submit-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.prev-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.progress-indicator {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+label {
+    display: block;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: #333;
+    outline: none;
+}
+
+input[type="number"]::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+input[type="number"]:focus,
+select:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+}
+
+.error-message {
+    display: none;
+    color: #f87171;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+
+select option {
+    background-color: #f0f4ff;
+    color: #333;
+    padding: 10px;
+}
+
+select option:hover {
+    background-color: #e0e7ff;
+}
+
+select option:checked {
+    background: linear-gradient(#667eea, #667eea);
+    background-color: #667eea;
+    color: white;
+}
+
+.result {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 50px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 25px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    animation: fadeIn 0.5s ease;
+    max-width: 500px;
+    margin: 25px auto 0;
+}
+
+.result-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+}
+
+.result h3 {
+    font-size: 1.8rem;
+    color: white;
+    margin: 0;
+    line-height: 1.6;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.result h3.placed {
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+}
+
+.result h3.not-placed {
+    color: #f87171;
+    text-shadow: 0 0 20px rgba(248, 113, 113, 0.4);
+}
+
+.result h3.error {
+    color: #fbbf24;
+    font-size: 1.2rem;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+.back-btn {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.auto-refresh-text {
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.auto-refresh-text span {
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 2rem;
+    }
+
+    form {
+        padding: 25px;
+    }
+
+    .prev-btn,
+    .next-btn,
+    .submit-btn {
+        font-size: 0.9rem;
+    }
+}
